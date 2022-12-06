@@ -1,2 +1,4 @@
 *pycache*
 /*env
+/build
+/exit

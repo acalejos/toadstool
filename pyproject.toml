@@ -1,0 +1,11 @@
+[project]
+name = 'Toadstool'
+description = 'Python Load Tools Suite'
+version = '0.1.0'
+authors = [
+    { name = 'Andrés Alejos', email = 'acalejos@proton.me' }
+]
+
+[project.optional-dependencies]
+gql = ['graphql_core>=3.2.3']
+all = ['graphql_core>=3.2.3']

@@ -22,7 +22,6 @@ class GqlLoader():
     @classmethod
     def find_spec(cls, name, path, target=None):
         """Look for GQL file"""
-        print(name)
         package, _, module_name = name.rpartition(".")
         gql_file_names = [f"{module_name}.gql",f"{module_name}.graphql"]
         directories = sys.path if path is None else path

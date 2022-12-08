@@ -34,6 +34,7 @@ class JsonLoader():
         with self.path.open() as f:
             data = json.load(f)
         fieldnames = tuple(_identifier(key) for key in data.keys())
+        # TODO Does this handle irregular / malformed names from inner json keys?
         fields = dict(zip(fieldnames, [to_namespace(value) for value in data.values()]))
         module.__dict__.update(fields)
         module.__dict__["json"] = data

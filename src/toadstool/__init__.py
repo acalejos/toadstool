@@ -5,6 +5,7 @@ from importlib import import_module
 LOG = logging.getLogger("toadstool")
 all_loaders= [
     ('toadstool.loaders.gql_loader','GqlLoader','gql'),
+    ('toadstool.loaders.yaml_loader','YamlLoader','yaml'),
     ('toadstool.loaders.json_loader','JsonLoader',None)
 ]
 active_loaders = []

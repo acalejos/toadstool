@@ -8,4 +8,5 @@ authors = [
 
 [project.optional-dependencies]
 gql = ['graphql_core>=3.2.3']
-all = ['graphql_core>=3.2.3']
+yaml = ['pyyaml >= 5.3.1']
+all = ['graphql_core>=3.2.3','pyyaml >= 5.3.1']

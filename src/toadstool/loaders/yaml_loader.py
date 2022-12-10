@@ -1,6 +1,3 @@
-import pathlib
-import sys
-from importlib.machinery import ModuleSpec
 import yaml
 
 from toadstool.utils.utils import identifier
@@ -12,22 +9,17 @@ class YamlLoader(Loader):
     """
     @classmethod
     def find_spec(cls, name, path, target=None):
-        """Look for Config file"""
-        package, _, module_name = name.rpartition(".")
-        filename = f"{module_name}.yaml"
-        directories = sys.path if path is None else path
-        for directory in directories:
-            path = pathlib.Path(directory) / filename
-            if path.exists():
-                return ModuleSpec(name, cls(path))
+        """Look for file"""
+        return super().find_spec(name,path,target,file_exts="yaml")
 
     def exec_module(self, module):
         """Executing the module means reading the YAML file"""
         with self.path.open() as f:
             docs = list(yaml.safe_load_all(f))
-        for doc in docs:
-            fieldnames = tuple(identifier(key) for key in doc.keys())
-            fields = dict(zip(fieldnames, doc.values()))
-            module.__dict__.update(fields)
+            if len(docs) == 1:
+                doc = docs[0]
+                fieldnames = tuple(identifier(key) for key in doc.keys())
+                fields = dict(zip(fieldnames, doc.values()))
+                module.__dict__.update(fields)
         module.__dict__["yaml"] = docs
-        module.__file__ = str(self.path)
+        super().exec_module(module)

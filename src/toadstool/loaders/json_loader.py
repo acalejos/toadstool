@@ -1,6 +1,3 @@
-import pathlib
-import sys
-from importlib.machinery import ModuleSpec
 import json
 
 from toadstool.utils.utils import to_namespace, identifier
@@ -13,13 +10,7 @@ class JsonLoader(Loader):
     @classmethod
     def find_spec(cls, name, path, target=None):
         """Look for Json file"""
-        package, _, module_name = name.rpartition(".")
-        filename = f"{module_name}.json"
-        directories = sys.path if path is None else path
-        for directory in directories:
-            path = pathlib.Path(directory) / filename
-            if path.exists():
-                return ModuleSpec(name, cls(path))
+        return super().find_spec(name,path,target,file_exts="json")
 
     def exec_module(self, module):
         """Executing the module means reading the gql file"""
@@ -30,4 +21,4 @@ class JsonLoader(Loader):
         fields = dict(zip(fieldnames, [to_namespace(value) for value in data.values()]))
         module.__dict__.update(fields)
         module.__dict__["json"] = data
-        module.__file__ = str(self.path)
+        super().exec_module(module)

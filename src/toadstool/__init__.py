@@ -14,12 +14,11 @@ for loader_mod, loader_class, extra_option in all_loaders:
     try:
         module = import_module(loader_mod)
         cls = getattr(module,loader_class)
-    except (ImportError, ModuleNotFoundError) as e:
-        if extra_option is None:
-            raise e
-        else:
+    except (ImportError, ModuleNotFoundError):
+        if extra_option is not None:
             LOG.info(f"Running without {extra_option} support. Install with `pip install {__name__}[{extra_option}]")
     except AttributeError as e:
         raise e
     else:
-        sys.meta_path.append(cls)
+        if cls not in sys.meta_path:
+            sys.meta_path.append(cls)

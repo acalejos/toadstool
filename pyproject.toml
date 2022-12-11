@@ -9,4 +9,5 @@ authors = [
 [project.optional-dependencies]
 gql = ['graphql_core>=3.2.3']
 yaml = ['pyyaml >= 5.3.1']
+toml = ['toml >= 0.10.2;python_version < "3.11"']
 all = ['graphql_core>=3.2.3','pyyaml >= 5.3.1']

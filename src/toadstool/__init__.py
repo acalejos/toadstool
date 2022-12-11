@@ -6,9 +6,9 @@ LOG = logging.getLogger("toadstool")
 all_loaders= [
     ('toadstool.loaders.gql_loader','GqlLoader','gql'),
     ('toadstool.loaders.yaml_loader','YamlLoader','yaml'),
-    ('toadstool.loaders.json_loader','JsonLoader',None)
+    ('toadstool.loaders.json_loader','JsonLoader',None),
+    ('toadstool.loaders.toml_loader','TomlLoader','toml')
 ]
-active_loaders = []
 
 for loader_mod, loader_class, extra_option in all_loaders:
     try:
@@ -19,7 +19,7 @@ for loader_mod, loader_class, extra_option in all_loaders:
             raise e
         else:
             LOG.info(f"Running without {extra_option} support. Install with `pip install {__name__}[{extra_option}]")
+    except AttributeError as e:
+        raise e
     else:
-        active_loaders.append(cls)
-
-sys.meta_path += active_loaders
+        sys.meta_path.append(cls)

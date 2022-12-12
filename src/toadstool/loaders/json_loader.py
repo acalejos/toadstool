@@ -1,6 +1,6 @@
 import json
 
-from toadstool.utils.utils import to_namespace, identifier
+from toadstool.utils.utils import identifier
 from toadstool.loaders.base_loader import Loader
 
 class JsonLoader(Loader):
@@ -17,8 +17,7 @@ class JsonLoader(Loader):
         with self.path.open() as f:
             data = json.load(f)
         fieldnames = tuple(identifier(key) for key in data.keys())
-        # TODO Does this handle irregular / malformed names from inner json keys?
-        fields = dict(zip(fieldnames, [to_namespace(value) for value in data.values()]))
+        fields = dict(zip(fieldnames, data.values()))
         module.__dict__.update(fields)
         module.__dict__["json"] = data
         super().exec_module(module)

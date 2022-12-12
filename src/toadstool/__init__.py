@@ -7,7 +7,8 @@ all_loaders= [
     ('toadstool.loaders.gql_loader','GqlLoader','gql'),
     ('toadstool.loaders.yaml_loader','YamlLoader','yaml'),
     ('toadstool.loaders.json_loader','JsonLoader',None),
-    ('toadstool.loaders.toml_loader','TomlLoader','toml')
+    ('toadstool.loaders.toml_loader','TomlLoader','toml'),
+    ('toadstool.loaders.csv_loader','CsvLoader',None)
 ]
 
 for loader_mod, loader_class, extra_option in all_loaders:

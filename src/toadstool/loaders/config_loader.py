@@ -12,9 +12,9 @@ class ConfigLoader(Loader):
     def exec_module(self, module):
         """Executing the module means reading the gql file"""
         config = configparser.ConfigParser()
-        data = config.read(self.path)
-        fieldnames = tuple(identifier(key) for key in data.sections())
-        fields = dict(zip(fieldnames, data.values()))
+        config.read(self.path)
+        fieldnames = tuple(identifier(key) for key in config.sections())
+        fields = dict(zip(fieldnames, config._sections.values()))
         module.__dict__.update(fields)
-        module.__dict__["config"] = data
+        module.__dict__["config"] = config
         super().exec_module(module)

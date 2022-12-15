@@ -7,10 +7,7 @@ class YamlLoader(Loader):
     """
     Used to import Json files into a Python dict
     """
-    @classmethod
-    def find_spec(cls, name, path, target=None):
-        """Look for file"""
-        return super().find_spec(name,path,target,file_exts="yaml")
+    file_exts = "yaml"
 
     def exec_module(self, module):
         """Executing the module means reading the YAML file"""

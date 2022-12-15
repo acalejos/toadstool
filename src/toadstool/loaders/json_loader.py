@@ -7,10 +7,7 @@ class JsonLoader(Loader):
     """
     Used to import Json files into a Python dict
     """
-    @classmethod
-    def find_spec(cls, name, path, target=None):
-        """Look for Json file"""
-        return super().find_spec(name,path,target,file_exts="json")
+    file_exts="json"
 
     def exec_module(self, module):
         """Executing the module means reading the gql file"""

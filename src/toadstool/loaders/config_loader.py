@@ -7,10 +7,7 @@ class ConfigLoader(Loader):
     """
     Used to import Config files into a Python dict
     """
-    @classmethod
-    def find_spec(cls, name, path, target=None):
-        """Look for Config file"""
-        return super().find_spec(name,path,target,file_exts="ini")
+    file_exts=["ini","cfg","config"]
 
     def exec_module(self, module):
         """Executing the module means reading the gql file"""

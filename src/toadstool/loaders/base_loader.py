@@ -2,7 +2,7 @@ import pathlib
 import sys
 from importlib.machinery import ModuleSpec
 
-class Loader():
+class Loader:
     """
     Used to import files into a Python dict
     """
@@ -11,16 +11,27 @@ class Loader():
         self.path = path
 
     @classmethod
-    def find_spec(cls, name, path, target=None, file_exts: list | str = None) -> ModuleSpec:
+    @property
+    def file_exts(cls) -> str | list[str]:
+        """
+        Define in the subclass which file extension this Loader should be used for
+
+        Raises:
+            NotImplementedError: Raised when subclass does not implement this property
+        """
+        raise NotImplementedError(f"Class {cls.__name__} must implement attribute 'file_exts'")
+
+    @classmethod
+    def find_spec(cls, name, path, target=None) -> ModuleSpec:
         """Look for sfile"""
         package, _, module_name = name.rpartition(".")
         directories = sys.path if path is None else path
-        if isinstance(file_exts, list):
-            filenames = [f"{module_name}.{ext}" for ext in file_exts]
-        elif isinstance(file_exts,str):
-            filenames = [f"{module_name}.{file_exts}"]
+        if isinstance(cls.file_exts, list):
+            filenames = [f"{module_name}.{ext}" for ext in cls.file_exts]
+        elif isinstance(cls.file_exts,str):
+            filenames = [f"{module_name}.{cls.file_exts}"]
         else:
-            raise ValueError(file_exts)
+            raise ValueError(cls.file_exts)
         for filename in filenames:
             for directory in directories:
                 path = pathlib.Path(directory) / filename

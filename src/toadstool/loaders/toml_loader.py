@@ -1,23 +1,19 @@
 try:
     import tomllib as toml
 except ImportError:
-    import logging
     import sys
-    logger = logging.getLogger("toadstool")
-    logging.info(f"Current Python Version: {sys.version.split()[0]} is less than required '3.11.0' to use `tomllib` standard library. Reverting to `toml` library")
+    from toadstool import LOG
+    LOG.info("Current Python Version: %s is less than required '3.11.0' to use `tomllib` standard library. Reverting to `toml` library",sys.version.split()[0])
     import toml
 
-from toadstool.utils.utils import identifier, to_namespace, NestedNamespace
+from toadstool.utils.utils import identifier
 from toadstool.loaders.base_loader import Loader
 
 class TomlLoader(Loader):
     """
     Used to import Toml files into a Python dict
     """
-    @classmethod
-    def find_spec(cls, name, path, target=None):
-        """Look for file"""
-        return super().find_spec(name,path,target,file_exts="toml")
+    file_exts="toml"
 
     def exec_module(self, module):
         """Executing the module means reading the Toml file"""

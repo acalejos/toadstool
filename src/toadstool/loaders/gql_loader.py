@@ -14,10 +14,7 @@ class GqlLoader(Loader):
 
     Not to be used with schema files!
     """
-    @classmethod
-    def find_spec(cls, name, path, target=None):
-        """Look for GQL file"""
-        return super().find_spec(name,path,target,file_exts=["gql","graphql"])
+    file_exts=["gql","graphql"]
 
     def exec_module(self, module):
         """Executing the module means reading the gql file"""

@@ -16,7 +16,6 @@ class TomlLoader(Loader):
     file_exts="toml"
 
     def exec_module(self, module):
-        """Executing the module means reading the Toml file"""
         with self.path.open() as f:
             data = toml.load(f)
         fieldnames = tuple(identifier(key) for key in data.keys())

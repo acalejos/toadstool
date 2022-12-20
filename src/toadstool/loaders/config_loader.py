@@ -10,7 +10,6 @@ class ConfigLoader(Loader):
     file_exts=["ini","cfg","config"]
 
     def exec_module(self, module):
-        """Executing the module means reading the gql file"""
         config = configparser.ConfigParser()
         config.read(self.path)
         fieldnames = tuple(identifier(key) for key in config.sections())

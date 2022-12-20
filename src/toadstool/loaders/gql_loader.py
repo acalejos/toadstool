@@ -17,7 +17,6 @@ class GqlLoader(Loader):
     file_exts=["gql","graphql"]
 
     def exec_module(self, module):
-        """Executing the module means reading the gql file"""
         with self.path.open() as f:
             source = Source(f.read(), "GraphQL request")
         ast = parse(source)

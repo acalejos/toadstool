@@ -62,8 +62,8 @@ Requires Python 3.10
 `$ python3 -m pip install toadstool[options]`
 Where `options` are any of the following (or combinations thereof):
 
-* `toml` For `.toml` support for Python versions prior to `Python 3.11`, which introduced `tomllib` into the standard library
-* `yaml` For `.yaml` support
+* `toml` For `.toml` support using `toml` library for Python versions prior to `Python 3.11`, which introduced `tomllib` into the standard library
+* `yaml` For `.yaml` support using `PyYaml`
 * `gql` For `.gql` or `.graphql` query support using `graphql-core` library
 
 ## Usage
@@ -73,7 +73,7 @@ To use this module, simply `import toadstool` before any import you wish to use 
 ## Loaders
 
 <details>
-  <summary>GraphQL</summary>
+  <summary>GraphQL (.gql | .graphql)</summary>
 
 Load graphql queries directly as graphql.language.ast.DocumentNode objects from the [GraphQL Core Library](https://github.com/graphql-python/graphql-core/tree/main/src/graphql).  Allows direct importing of queries/mutations/subscriptions/fragments (aka GraphQL operations).
 
@@ -135,7 +135,7 @@ Also tracks all operations in a module dict as `queries.operations`
 </details>
 
 <details>
-  <summary>JSON</summary>
+  <summary>JSON (.json)</summary>
 
 Loads JSON objects using builtin `json` library. The top-level JSON keys are stored as attirbutes for the module and the whole `json` converted `dict` is stored as `imported_name.json` For example, the following file `sample.json`
 
@@ -185,7 +185,7 @@ print(sample.json)
 </details>
 
 <details>
-  <summary>TOML</summary>
+  <summary>TOML (.toml)</summary>
 
   Loads TOML files such that each top-level table becomes an attribute of the imported module. Also loads the whole TOML file as a dictionary under the `toml` attirbute (which will overwrite any table from the file with the name `toml` as well). For example, if you have `example.toml` with the following contents:
 
@@ -228,6 +228,124 @@ import example
 
 >>> example.
 example.Root     example.project  example.sample   example.toml
+```
+
+</details>
+
+<details>
+  <summary>YAML (.yaml | .yml)</summary>
+
+  Loads a YAML file, assigning each top-level key as a module attribute (similar to the JSON loader). Also loads the whole YAML definition as a `dict` into the `yaml` attirbute. If the YAML file has more than 1 YAML definition (which is legal within the YAML definition), then only the `yaml` attribute is set, and is a `list[dict]`. Suppose you have a YAML file called `sample.yaml` with the following contents:
+
+```yaml
+document: 1
+name: 'erik'
+```
+
+then you could do the following:
+
+```python
+import toadstool
+import sample
+
+>>> sample.
+sample.document sample.name sample.yaml
+```
+
+and suppose you had a similar multifile YAML file:
+
+```yaml
+document: 1
+name: 'erik'
+---
+document: 2
+name: 'config'
+```
+
+then you could do the following:
+
+```python
+import toadstool
+import sample
+
+>>> sample.
+sample.yaml
+```
+
+</details>
+
+<details>
+  <summary>Config (.ini | .cfg | .config)</summary>
+
+  Uses the `configparser` package from the standard library to load the file and assign any top-level key to the module's attribute, and the entire `ConfigParser` object to the `config` attribute. Suppose you have the following config file `sample.ini`:
+
+  ```ini
+  [http]
+  port=8080
+  username=httpuser
+  [https]
+  port=8043
+  username=httpsuser
+  [FTP]
+  port=8043
+  username=ftpuser
+  [database]
+  driverclass   = com.mysql.jdbc.Driver
+  dbName        = mydatabase
+  port          = 3306
+  username      = root
+  ```
+
+  then you could do the following
+
+  ```python
+  import toadstool
+  import sample
+
+  >>> sample.
+  sample.http  sample.https sample.FTP sample.database sample.config
+  ```
+</details>
+
+<details>
+  <summary>CSV (.csv)</summary>
+
+Loads a CSV file and loads the contents into `rows` and `columns` attributes as `list[list[str]]`.  This will attempt to determine if the CSV contains a header as the first row, and will do the following according to that determination:
+
+If Header:
+
+* Creates attributes `named_rows` and `named_columns`
+  * `named_columns`: Each column is a `dict` keyed on the column header and contains the whole column
+  * `named_rows`: Each row contains a `dict` with each column entry keyed from its header to the value at that row.
+* Populates each column name as an attribute name that will correspond to its respective column
+* Populates an attribute `fieldnames` with the header values.
+
+For any CSV:
+
+* Creates a `rows` attirbute which contains a `list[list[str]]` with the CSV content rows (skips header if exists)
+* Creates a `columns` attirbute which contains a `list[list[str]]` with the CSV content columns
+
+Suppose you have a file called `sample.csv` with the following contents:
+
+```csv
+Index,Customer Id,First Name
+1,DD37Cf93aecA6Dc,Sheryl
+2,1Ef7b82A4CAAD10,Preston
+3,6F94879bDAfE5a6,Roy
+4,5Cef8BFA16c5e3c,Linda
+5,053d585Ab6b3159,Joanna
+```
+
+then you can do the following:
+
+```python
+import toadstool
+import sample
+
+>>> sample.
+sample.First_Name         sample.named_rows         sample.rows
+sample.Index              sample.columns            sample.named_columns
+sample.Customer_Id        sample.fieldnames
 ```
 
 </details>

@@ -23,7 +23,7 @@ class Loader:
 
     @classmethod
     def find_spec(cls, name, path, target=None) -> ModuleSpec:
-        """Look for sfile"""
+        """Look for file"""
         package, _, module_name = name.rpartition(".")
         directories = sys.path if path is None else path
         if isinstance(cls.file_exts, list):

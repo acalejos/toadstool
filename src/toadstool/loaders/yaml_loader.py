@@ -5,9 +5,9 @@ from toadstool.loaders.base_loader import Loader
 
 class YamlLoader(Loader):
     """
-    Used to import Json files into a Python dict
+    Used to import Yaml files into a Python dict
     """
-    file_exts = "yaml"
+    file_exts = ["yaml","yml"]
 
     def exec_module(self, module):
         """Executing the module means reading the YAML file"""

@@ -10,7 +10,6 @@ class JsonLoader(Loader):
     file_exts="json"
 
     def exec_module(self, module):
-        """Executing the module means reading the gql file"""
         with self.path.open() as f:
             data = json.load(f)
         fieldnames = tuple(identifier(key) for key in data.keys())

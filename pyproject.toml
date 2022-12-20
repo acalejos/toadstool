@@ -1,5 +1,5 @@
 [project]
-name = 'Toadstool'
+name = 'toadstool'
 description = 'Python Load Tools Suite'
 readme = 'README.md'
 requires-python = "~=3.10"
